@@ -1,14 +1,19 @@
-# Use the official Node.js image
-FROM node:14
+# Use the official Node.js image with version 18
+FROM node:18
+
+# Install pnpm globally
+RUN npm install -g pnpm
 
 # Create and change to the app directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and install dependencies
-COPY package.json ./
-RUN npm install
+# Copy package.json and pnpm-lock.yaml
+COPY package.json pnpm-lock.yaml ./
 
-# Copy the rest of the application code
+# Install dependencies using pnpm
+RUN pnpm install
+
+# Copy the rest of the application code, excluding node_modules
 COPY . .
 
 # Expose the port the app runs on
